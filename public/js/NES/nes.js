@@ -51,10 +51,10 @@ export default class {
 
     // Core
     boot() {
-        this.cpu.feed(this.cart.cart_data)
+        this.cpu.feed(this.cart.CHR_ROM)
         this.cpu.start()
-        
-        this.ppu.feed(this.cart.cart_data)
+
+        this.ppu.feed(this.cart.PRG_ROM)
         this.ppu.start()
     }
 
