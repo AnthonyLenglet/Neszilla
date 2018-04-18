@@ -9,6 +9,8 @@ export default class {
         this.ppu = new PPU()
         this.cart = new CartSlot()
 
+        console.log('core NES components loaded!')
+
         this.power_btn = document.querySelector('#powerbtn')
         this.power_is_on = false
         this.initPowerButton()
@@ -40,7 +42,7 @@ export default class {
 
     // Methods
     lookForCartridge() {
-        if (this.cart.cart_data.length) {
+        if (this.cart.slot.files.length) {
             return true
         } else {
             alert('please insert a cartridge first')
@@ -51,19 +53,16 @@ export default class {
 
     // Core
     boot() {
-        this.cpu.feed(this.cart.CHR_ROM)
+        this.cpu.feed(this.cart.PRG_ROM)
         this.cpu.start()
 
-        this.ppu.feed(this.cart.PRG_ROM)
+        this.ppu.feed(this.cart.CHR_ROM)
         this.ppu.start()
     }
 
     shutdown() {
-        /*
-        this.cpu.reset()
-        this.ppu.reset()
-        this.screenClear()
-        probably
-        */
+        this.cpu.flush()
+        this.ppu.flush()
+        //this.display.clear()
     }
 }

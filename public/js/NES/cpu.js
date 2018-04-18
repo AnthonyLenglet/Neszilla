@@ -6,20 +6,17 @@
  *      - https://wiki.nesdev.com/w/index.php/CPU
  */
 
-/*
- * About the stored data:
- * 1 PRG ROM page = 16384 bytes
- * 1 CHR ROM page = 8192 bytes
- */
-
 export default class {
     constructor() {
         this.data = []
-        console.log('CPU launched!')
     }
 
     feed(data) {
         this.data = data
+    }
+
+    flush() {
+        this.data = []
     }
 
 

@@ -18,11 +18,14 @@
 export default class {
     constructor() {
         this.data = []
-        console.log('PPU launched!')
     }
 
     feed(data) {
         this.data = data
+    }
+
+    flush() {
+        this.data = []
     }
 
 
