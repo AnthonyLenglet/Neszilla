@@ -5,18 +5,20 @@ import CartSlot from './cartSlot.js'
 export default class {
     constructor() {
         // Get the NES components
+
         this.cpu = new CPU()
         this.ppu = new PPU()
         this.cart = new CartSlot()
 
-        console.log('core NES components loaded!')
+        console.info('core NES components loaded!')
+
 
         this.power_btn = document.querySelector('#powerbtn')
         this.power_is_on = false
         this.initPowerButton()
     }
 
-    // Init
+    
     initPowerButton() {
         this.power_btn.addEventListener('click', () => {
             // boot up the system if the power is
@@ -40,7 +42,7 @@ export default class {
         })
     }
 
-    // Methods
+
     lookForCartridge() {
         if (this.cart.slot.files.length) {
             return true
@@ -50,11 +52,12 @@ export default class {
     }
 
 
-
-    // Core
     boot() {
         this.cpu.feed(this.cart.PRG_ROM)
         this.cpu.start()
+
+        this.cpu.link('ppu', this.ppu)
+        // this.cpu.link('apu', this.apu)
 
         this.ppu.feed(this.cart.CHR_ROM)
         this.ppu.start()

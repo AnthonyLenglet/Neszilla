@@ -8,19 +8,66 @@
 
 export default class {
     constructor() {
-        this.data = []
+        // Registers
+        this.PC = null
+        this.P = null
+        this.A = null
+        this.X = null
+        this.Y = null
+        this.S = null
+
+        // Direct link to the other NES hardware,
+        // in order to avoid constantly jumping through hoops
+        this.ppu = null
+        this.apu = null
+
+        // The PRG ROM of the game
+        this.PRG_ROM = []
     }
 
-    feed(data) {
-        this.data = data
+    /**
+     * Make a direct link between the CPU and another hardware
+     *
+     * @param {string} hardware The hardware to be linked to the CPU
+     * @param {hardware} instance The instance of the hardware
+     */
+    link(hardware, instance) {
+        switch(hardware) {
+            case 'ppu':
+                this.ppu = instance
+            break
+            case 'apu':
+                this.apu = instance
+            break
+            default:
+                console.error('[CPU] attempting to link unknown hardware: '+hardware)
+            break
+        }
+    }
+    
+    /**
+     * Feed the PRG ROM into the CPU
+     * @param  {string[]} PRG_ROM the PRG ROM to feed
+     */
+    feed(PRG_ROM) {
+        this.PRG_ROM = PRG_ROM
     }
 
+    /**
+     * Flush the CPU data
+     */
     flush() {
-        this.data = []
+        this.PC = null
+        this.P = null
+        this.A = null
+        this.X = null
+        this.Y = null
+        this.S = null
+        this.PRG_ROM = []
     }
 
 
     start() {
-        console.log(this.data)
+        console.log(this.PRG_ROM)
     }
 }

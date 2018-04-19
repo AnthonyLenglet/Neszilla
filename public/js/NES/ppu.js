@@ -17,19 +17,49 @@
 
 export default class {
     constructor() {
-        this.data = []
+        // Direct link to the other NES hardware,
+        // in order to avoid constantly jumping through hoops
+        this.cpu = null
+        this.apu = null
+
+        // The CHR ROM of the game
+        this.CHR_ROM = []
     }
 
-    feed(data) {
-        this.data = data
+    /**
+     * Make a direct link between the PPU and another hardware
+     *
+     * @param {string} hardware The hardware to be linked to the PPU
+     * @param {hardware} instance The instance of the hardware
+     */
+    link(hardware, instance) {
+        switch(hardware) {
+            case 'cpu':
+                this.cpu = instance
+            break
+            case 'apu':
+                this.apu = instance
+            break
+            default:
+                console.error('[PPU] attempting to link unknown hardware: '+hardware)
+            break
+        }
+    }
+
+    /**
+     * Feed the CHR ROM into the PPU
+     * @param  {array} CHR_ROM the CHR ROM to feed
+     */
+    feed(CHR_ROM) {
+        this.CHR_ROM = CHR_ROM
     }
 
     flush() {
-        this.data = []
+        this.CHR_ROM = []
     }
 
 
     start() {
-        console.log(this.data)
+        console.log(this.CHR_ROM)
     }
 }

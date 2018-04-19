@@ -14,11 +14,6 @@ export default class {
     }
 
 
-    // ----
-    // Init
-    // ----
-
-
     initCartReader() {
         this.cart_reader.addEventListener('load', () => {
             // interpret file as binary, convert to hexadecimal
@@ -27,8 +22,6 @@ export default class {
                 elem => { this.cart_data.push(elem.toString(16).padStart(2, '0')) }
             )
 
-            // Dispatch the data from the rom into the CHR ROM,
-            // the PRG ROM and the first "settings" line
             if(this.dispatchROM(this.cart_data) == 0)
                 alert('This cartridge is not valid!')
         })
@@ -36,22 +29,23 @@ export default class {
 
     initSlot() {
         this.slot.addEventListener('change', () => {
-            // check if a cartridge has been inserted,
-            // if there's a cartridge, fetch the data from said cartridge
-            // otherwise, flush any data that may be present
-            this.slot.files.length ? this.getFile(this.slot) : this.cart_data = []
+            this.slot.files.length ? this.fetchData(this.slot.files[0]) : this.cart_data = []
         })
     }
-
-
-    // -------
-    // Methods
-    // -------
-
-    getFile(cartridge) {
-        this.cart_reader.readAsArrayBuffer(cartridge.files[0])
+    
+    /**
+     * Fetch the data from the inserted cartridge
+     * @param  {Object} cartridge the inserted cartridge
+     */
+    fetchData(cartridge) {
+        this.cart_reader.readAsArrayBuffer(cartridge)
     }
 
+    /**
+     * Dispatch the data from the rom into the CHR ROM, the PRG ROM and the first "settings" line
+     * @param  {string[]} rom the hex dump of the rom
+     * @return {int}
+     */
     dispatchROM(rom) {
         let first_line = rom.splice(0x00, 0x10)
 
