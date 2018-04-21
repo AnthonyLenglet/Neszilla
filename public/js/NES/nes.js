@@ -1,3 +1,8 @@
+import clog, { clogDevMode } from '../lib/clog.js'
+clogDevMode(true)
+let logger = new clog()
+logger.setPrefix('NES')
+
 import CPU from './cpu.js'
 import PPU from './ppu.js'
 import CartSlot from './cartSlot.js'
@@ -10,15 +15,14 @@ export default class {
         this.ppu = new PPU()
         this.cart = new CartSlot()
 
-        console.info('core NES components loaded!')
-
+        logger.log('core components loaded!')
 
         this.power_btn = document.querySelector('#powerbtn')
         this.power_is_on = false
         this.initPowerButton()
     }
 
-    
+
     initPowerButton() {
         this.power_btn.addEventListener('click', () => {
             // boot up the system if the power is
@@ -47,18 +51,23 @@ export default class {
         if (this.cart.slot.files.length) {
             return true
         } else {
-            alert('please insert a cartridge first')
+            alert('Please insert a cartridge first')
         }
     }
 
 
     boot() {
+        this.cpu.link({
+            ppu: this.ppu
+            //apu: this.apu
+        })
         this.cpu.feed(this.cart.PRG_ROM)
         this.cpu.start()
 
-        this.cpu.link('ppu', this.ppu)
-        // this.cpu.link('apu', this.apu)
-
+        this.ppu.link({
+            cpu: this.cpu
+            //apu: this.apu
+        })
         this.ppu.feed(this.cart.CHR_ROM)
         this.ppu.start()
     }

@@ -32,7 +32,7 @@ export default class {
             this.slot.files.length ? this.fetchData(this.slot.files[0]) : this.cart_data = []
         })
     }
-    
+
     /**
      * Fetch the data from the inserted cartridge
      * @param  {Object} cartridge the inserted cartridge
@@ -60,9 +60,11 @@ export default class {
         // 1 PRG ROM page = 16384 bytes (0x4000)
         // 1 CHR ROM page = 8192 bytes (0x2000)
 
+        this.PRG_ROM= []
         for(let i=0; i<first_line[0x04]; i++)
             this.PRG_ROM.push(new Array(rom.splice(0x00, 0x4000)))
 
+        this.CHR_ROM= []
         for(let i=0; i<first_line[0x05]; i++)
             this.CHR_ROM.push(new Array(rom.splice(0x00, 0x2000)))
     }

@@ -1,10 +1,14 @@
 /*
- *  "The CPU core is based on the 6502 processor. It is made by Ricoh and
- *  lacks the MOS6502's decimal mode. In the NTSC NES, the RP2A03 chip
- *  contains the CPU and APU; in the PAL NES, the CPU and APU are contained
- *  within the RP2A07 chip."
- *      - https://wiki.nesdev.com/w/index.php/CPU
- */
+*  "The CPU core is based on the 6502 processor. It is made by Ricoh and
+*  lacks the MOS6502's decimal mode. In the NTSC NES, the RP2A03 chip
+*  contains the CPU and APU; in the PAL NES, the CPU and APU are contained
+*  within the RP2A07 chip."
+*      - https://wiki.nesdev.com/w/index.php/CPU
+*/
+
+import clog from '../lib/clog.js'
+let logger = new clog()
+logger.setPrefix('CPU')
 
 export default class {
     constructor() {
@@ -18,8 +22,10 @@ export default class {
 
         // Direct link to the other NES hardware,
         // in order to avoid constantly jumping through hoops
-        this.ppu = null
-        this.apu = null
+        this.links = {
+            ppu: null,
+            apu: null
+        }
 
         // The PRG ROM of the game
         this.PRG_ROM = []
@@ -28,23 +34,21 @@ export default class {
     /**
      * Make a direct link between the CPU and another hardware
      *
-     * @param {string} hardware The hardware to be linked to the CPU
-     * @param {hardware} instance The instance of the hardware
+     * @param {Object} new_links The object containing all the links
+     * @param {string} new_links.hardware The hardware to be linked to the CPU
+     * @param {hardware} new_links.instance The instance of the hardware
      */
-    link(hardware, instance) {
-        switch(hardware) {
-            case 'ppu':
-                this.ppu = instance
-            break
-            case 'apu':
-                this.apu = instance
-            break
-            default:
-                console.error('[CPU] attempting to link unknown hardware: '+hardware)
-            break
+    link(new_links) {
+        for(let hardware in new_links)
+            if(!this.links.hasOwnProperty(hardware))
+                logger.log('Linking unknown hardware: '+hardware)
+
+        this.new_links = {
+            ...this.links,
+            new_links
         }
     }
-    
+
     /**
      * Feed the PRG ROM into the CPU
      * @param  {string[]} PRG_ROM the PRG ROM to feed
@@ -57,6 +61,7 @@ export default class {
      * Flush the CPU data
      */
     flush() {
+        logger.log('Flushing...')
         this.PC = null
         this.P = null
         this.A = null
@@ -68,6 +73,6 @@ export default class {
 
 
     start() {
-        console.log(this.PRG_ROM)
+        logger.log(this.PRG_ROM)
     }
 }
