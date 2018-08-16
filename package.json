@@ -2,6 +2,7 @@
     "name": "Neszilla",
     "version": "1.0.0",
     "description": "A Javascript NES emulator 🎮",
+    "typings": "./typings.d.ts",
     "scripts": {
         "start": "webpack-dev-server",
         "build": "webpack",

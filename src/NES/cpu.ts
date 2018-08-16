@@ -10,16 +10,16 @@ import { clog } from '../lib/clog'
 const logger = new clog()
 logger.setPrefix('CPU')
 
-export class CPU {
-  private PC: any
-  private P: any
-  private A: any
-  private X: any
-  private Y: any
-  private S: any
+export class CPU implements CPU {
+  public PC: any
+  public P: any
+  public A: any
+  public X: any
+  public Y: any
+  public S: any
 
-  private links: { ppu?: any, apu?: any } // { ppu: Neszilla.PPU, apu: Neszilla.APU }
-  private PRG_ROM: string[][]
+  public links: Neszilla.links
+  public PRG_ROM: string[][]
 
   constructor() {
     // Registers

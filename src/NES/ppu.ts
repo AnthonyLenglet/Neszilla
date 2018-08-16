@@ -19,9 +19,9 @@ import { clog } from '../lib/clog'
 const logger = new clog()
 logger.setPrefix('PPU')
 
-export class PPU {
-  private links: { cpu?: any, apu?: any } // { ppu: Neszilla.PPU, apu: Neszilla.APU }
-  private CHR_ROM: string[][]
+export class PPU implements Neszilla.PPU {
+  public links: Neszilla.links
+  public CHR_ROM: string[][]
 
   constructor() {
     // Direct link to the other NES hardware,

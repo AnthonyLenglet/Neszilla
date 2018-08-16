@@ -1,8 +1,8 @@
 import { toBinary, toInt } from '../utilities'
 
 export class CartSlot {
-  private cartReader: FileReader
-  private cartData: string[]
+  public cartReader: FileReader
+  public cartData: string[]
   public slot: HTMLInputElement
   public CHR_ROM: string[][]
   public PRG_ROM: string[][]

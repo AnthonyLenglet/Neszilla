@@ -6,11 +6,9 @@
     "outDir": "dist",
     "sourceMap": true
   },
-  "types": [
-    "./typings.d.ts"
-  ],
   "include": [
-    "src/**/*.ts"
+    "src/**/*.ts",
+    "**/*.d.ts"
   ],
   "exclude": [
     "node_modules"
