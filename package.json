@@ -3,7 +3,8 @@
     "version": "1.0.0",
     "description": "A Javascript NES emulator 🎮",
     "scripts": {
-        "start": "nodemon ./bin/www",
+        "start": "webpack-dev-server",
+        "build": "webpack",
         "test": "echo \"Error: no test specified\" && exit 1"
     },
     "keywords": [
@@ -14,8 +15,14 @@
     ],
     "author": "Anthony Lenglet",
     "license": "ISC",
-    "dependencies": {
-        "express": "^4.16.3",
-        "nodemon": "^1.17.3"
+    "dependencies": {},
+    "devDependencies": {
+        "ts-loader": "^4.4.2",
+        "tslint": "^5.11.0",
+        "tslint-config-airbnb": "^5.9.2",
+        "typescript": "^3.0.1",
+        "webpack": "^4.16.5",
+        "webpack-cli": "^3.1.0",
+        "webpack-dev-server": "^3.1.5"
     }
 }
