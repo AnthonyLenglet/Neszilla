@@ -48,10 +48,10 @@ export class CPU implements CPU {
    * @param {string} newLinks.hardware The hardware to be linked to the CPU
    * @param {hardware} newLinks.instance The instance of the hardware
    */
-  link(newLinks: { ppu?: any, apu?: any }): void {
+  link(newLinks: Neszilla.links): void {
     for (const hardware in newLinks) {
       if (!this.links.hasOwnProperty(hardware)) {
-        logger.log('Linking unknown hardware: ' + hardware)
+        logger.log(`Linking unknown hardware: ${hardware}`)
       }
     }
 
