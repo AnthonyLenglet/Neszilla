@@ -15,6 +15,12 @@
 *      - https://wiki.nesdev.com/w/index.php/PPU
 */
 
+import {
+  NoCardError,
+  LinkError,
+  PPUStartupError,
+} from '../lib/errors'
+
 import { clog } from '../lib/clog'
 const logger = new clog()
 logger.setPrefix('PPU')
@@ -30,6 +36,21 @@ export class PPU {
       cpu: null,
       apu: null,
     }
+  }
+
+  /**
+   * extracts the CHR ROM from the cartridge
+   * @return the cartridge's CHR ROM
+   */
+  async extractCHR(): Promise<Neszilla.CHR_ROM> {
+    if (this.links.cartSlot) {
+      const cart = this.links.cartSlot.getCart()
+      if (cart) {
+        return cart.CHR_ROM
+      }
+      throw new NoCardError('No cart found')
+    }
+    throw new LinkError('the cart slot object is not linked to the PPU')
   }
 
   /**
@@ -54,18 +75,23 @@ export class PPU {
     }
   }
 
+  /**
+   * Flush the PPU data
+   */
   flush(): void {
     logger.log('Flushing...')
   }
 
-  start(): void {
-    let CHR_ROM: string[][] = []
-    if (this.links.cartSlot) {
-      const cart = this.links.cartSlot.getCart()
-      if (cart) {
-        CHR_ROM = cart.CHR_ROM
-      }
-    }
-    logger.log(CHR_ROM)
+  /**
+   * Start the PPU
+   */
+  async start(): Promise<void> {
+    const CHR_ROM: Neszilla.CHR_ROM = await this.extractCHR()
+      .catch((error: Error) => {
+        console.error(`${error.name}: ${error.message}`)
+        throw new PPUStartupError('Failed to extract CHR ROM')
+      })
+
+    logger.log('Successfully extracted CHR ROM')
   }
 }

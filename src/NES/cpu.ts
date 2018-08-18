@@ -6,6 +6,12 @@
 *      - https://wiki.nesdev.com/w/index.php/CPU
 */
 
+import {
+  NoCardError,
+  LinkError,
+  CPUStartupError,
+} from '../lib/errors'
+
 import { clog } from '../lib/clog'
 const logger = new clog()
 logger.setPrefix('CPU')
@@ -36,6 +42,21 @@ export class CPU {
       ppu: null,
       apu: null,
     }
+  }
+
+  /**
+   * extracts the PRG ROM from the cartridge
+   * @return the cartridge's PRG ROM
+   */
+  async extractPRG(): Promise<Neszilla.PRG_ROM> {
+    if (this.links.cartSlot) {
+      const cart = this.links.cartSlot.getCart()
+      if (cart) {
+        return cart.PRG_ROM
+      }
+      throw new NoCardError('No cart found')
+    }
+    throw new LinkError('the cart slot object is not linked to the PPU')
   }
 
   /**
@@ -73,14 +94,16 @@ export class CPU {
     this.S = null
   }
 
-  start(): void {
-    let PRG_ROM: string[][] = []
-    if (this.links.cartSlot) {
-      const cart = this.links.cartSlot.getCart()
-      if (cart) {
-        PRG_ROM = cart.PRG_ROM
-      }
-    }
-    logger.log(PRG_ROM)
+  /**
+   * Start the CPU
+   */
+  async start(): Promise<void> {
+    const PRG_ROM: Neszilla.PRG_ROM = await this.extractPRG()
+      .catch((error: Error) => {
+        console.error(`${error.name}: ${error.message}`)
+        throw new CPUStartupError('Failed to extract PRG ROM')
+      })
+
+    logger.log('Successfully extracted PRG ROM')
   }
 }
