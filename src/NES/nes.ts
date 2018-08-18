@@ -68,7 +68,13 @@ export class NES {
   boot() {
     this.power(true)
     this.cpu.start()
+      .catch((error: Error) => {
+        console.error(`${error.name}: ${error.message}`)
+      })
     this.ppu.start()
+      .catch((error: Error) => {
+        console.error(`${error.name}: ${error.message}`)
+      })
   }
 
   shutdown() {
