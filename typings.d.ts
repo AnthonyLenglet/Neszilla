@@ -1,4 +1,7 @@
 declare namespace Neszilla {
+  type CHR_ROM = string[][]
+  type PRG_ROM = string[][]
+
   // interface CPU {
   //
   // }
@@ -16,8 +19,8 @@ declare namespace Neszilla {
   }
 
   interface Cart {
-    PRG_ROM: string[][]
-    CHR_ROM: string[][]
+    PRG_ROM: Neszilla.PRG_ROM
+    CHR_ROM: Neszilla.CHR_ROM
   }
 
   interface links {
