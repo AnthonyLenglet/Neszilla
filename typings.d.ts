@@ -23,6 +23,9 @@ declare namespace Neszilla {
     cartReader: FileReader
     cartData: string[]
     slot: HTMLInputElement
+  }
+
+  interface Cart {
     PRG_ROM: string[][]
     CHR_ROM: string[][]
   }
