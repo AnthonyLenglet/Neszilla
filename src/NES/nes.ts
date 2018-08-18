@@ -15,14 +15,12 @@ export class NES {
   private powerIsOn: boolean
 
   constructor() {
-    // Get the NES components
     this.cpu = new CPU()
     this.ppu = new PPU()
     this.cartSlot = new CartSlot()
 
-    logger.log('core components loaded !')
+    logger.log('Core components loaded !')
 
-    // Link the NES components
     this.cpu.link({
       cartSlot: this.cartSlot,
       ppu: this.ppu,
@@ -34,17 +32,21 @@ export class NES {
       // apu: this.apu
     })
 
-    logger.log('core components linked !')
+    logger.log('Core components linked !')
 
     this.powerBtn = <Element> document.querySelector('#powerbtn')
     this.powerIsOn = false
     this.initPowerButton()
   }
 
+  /**
+   * @protected
+   * Initializes the power button (INTERNAL USE ONLY)
+   */
   initPowerButton() {
     this.powerBtn.addEventListener('click', () => {
       if (!this.powerIsOn) {
-        if (this.lookForCartridge()) {
+        if (this.cartSlot.getCart() !== null) {
           this.boot()
         } else {
           alert('Please insert a cartridge first')
@@ -55,17 +57,20 @@ export class NES {
     })
   }
 
-  lookForCartridge(): boolean {
-    return this.cartSlot.getCart() !== null
-  }
-
+  /**
+   * Set the NES power state on or off
+   * @param isOn NES power state
+   */
   power(isOn: boolean): void {
     this.powerIsOn = isOn
     this.powerBtn.innerHTML = isOn ? 'Turn off' : 'Turn on'
     this.cartSlot.lock(isOn)
   }
 
-  boot() {
+  /**
+   * Boot up the NES
+   */
+  boot(): void {
     this.power(true)
     this.cpu.start()
       .catch((error: Error) => {
@@ -77,7 +82,10 @@ export class NES {
       })
   }
 
-  shutdown() {
+  /**
+   * Shut down the NES
+   */
+  shutdown(): void {
     this.power(false)
     this.cpu.flush()
     this.ppu.flush()
