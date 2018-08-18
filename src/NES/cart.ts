@@ -3,8 +3,8 @@ import { toInt } from '../utilities'
 export class Cart implements Neszilla.Cart {
   private readonly RECIEVED_DATA: string[]
   private readonly firstLine: string[]
-  public readonly CHR_ROM: string[][]
-  public readonly PRG_ROM: string[][]
+  public readonly CHR_ROM: Neszilla.CHR_ROM
+  public readonly PRG_ROM: Neszilla.PRG_ROM
 
   constructor(data: string[]) {
     this.RECIEVED_DATA = data
