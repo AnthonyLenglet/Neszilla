@@ -1,28 +1,18 @@
 declare namespace Neszilla {
-  interface CPU {
-    PC: any
-    P: any
-    A: any
-    X: any
-    Y: any
-    S: any
-    links: Neszilla.links
-    PRG_ROM: string[][]
-  }
+  // interface CPU {
+  //
+  // }
 
-  interface PPU {
-    links: Neszilla.links
-    CHR_ROM: string[][]
-  }
+  // interface PPU {
+  //
+  // }
 
   // interface APU {
   //
   // }
 
   interface CartSlot {
-    cartReader: FileReader
-    cartData: string[]
-    slot: HTMLInputElement
+    getCart: () => Neszilla.Cart | null
   }
 
   interface Cart {
@@ -31,8 +21,9 @@ declare namespace Neszilla {
   }
 
   interface links {
-    cpu?: any // Neszilla.CPU
-    ppu?: any // Neszilla.PPU
-    apu?: any // Neszilla.APU
+    cartSlot?: Neszilla.CartSlot | null
+    cpu?: any // Neszilla.CPU | null
+    ppu?: any // Neszilla.PPU | null
+    apu?: any // Neszilla.APU | null
   }
 }

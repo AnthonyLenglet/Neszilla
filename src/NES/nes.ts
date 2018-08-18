@@ -10,7 +10,7 @@ import { CartSlot } from './cartSlot'
 export class NES {
   private cpu: CPU
   private ppu: PPU
-  private cart: CartSlot
+  private cartSlot: CartSlot
   private powerBtn: Element
   private powerIsOn: boolean
 
@@ -18,9 +18,23 @@ export class NES {
     // Get the NES components
     this.cpu = new CPU()
     this.ppu = new PPU()
-    this.cart = new CartSlot()
+    this.cartSlot = new CartSlot()
 
-    logger.log('core components loaded!')
+    logger.log('core components loaded !')
+
+    // Link the NES components
+    this.cpu.link({
+      cartSlot: this.cartSlot,
+      ppu: this.ppu,
+      // apu: this.apu
+    })
+    this.ppu.link({
+      cartSlot: this.cartSlot,
+      cpu: this.cpu,
+      // apu: this.apu
+    })
+
+    logger.log('core components linked !')
 
     this.powerBtn = <Element> document.querySelector('#powerbtn')
     this.powerIsOn = false
@@ -29,56 +43,36 @@ export class NES {
 
   initPowerButton() {
     this.powerBtn.addEventListener('click', () => {
-      // boot up the system if the power is
-      // turned on and a cartridge is found
-      if (!this.powerIsOn && this.lookForCartridge()) {
-        this.powerIsOn = true
-        this.powerBtn.innerHTML = 'Turn off'
-        this.cart.slot.disabled = true
-
-        this.boot()
+      if (!this.powerIsOn) {
+        if (this.lookForCartridge()) {
+          this.boot()
+        } else {
+          alert('Please insert a cartridge first')
+        }
       } else {
-        // if the power is turned off OR if no cartridges
-        // are found, shut down the system
-        this.powerIsOn = false
-        this.powerBtn.innerHTML = 'Turn on'
-        this.cart.slot.disabled = false
-
         this.shutdown()
       }
     })
   }
 
   lookForCartridge(): boolean {
-    let isPresent: boolean
+    return this.cartSlot.getCart() !== null
+  }
 
-    if (!this.cart.slot.files) {
-      alert('Please insert a cartridge first')
-      isPresent = false
-    } else {
-      isPresent = true
-    }
-
-    return isPresent
+  power(isOn: boolean): void {
+    this.powerIsOn = isOn
+    this.powerBtn.innerHTML = isOn ? 'Turn off' : 'Turn on'
+    this.cartSlot.lock(isOn)
   }
 
   boot() {
-    this.cpu.link({
-      ppu: this.ppu,
-      // apu: this.apu
-    })
-    this.cpu.feed(this.cart.PRG_ROM)
+    this.power(true)
     this.cpu.start()
-
-    this.ppu.link({
-      cpu: this.cpu,
-      // apu: this.apu
-    })
-    this.ppu.feed(this.cart.CHR_ROM)
     this.ppu.start()
   }
 
   shutdown() {
+    this.power(false)
     this.cpu.flush()
     this.ppu.flush()
     // this.display.clear()

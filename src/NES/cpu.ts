@@ -10,16 +10,15 @@ import { clog } from '../lib/clog'
 const logger = new clog()
 logger.setPrefix('CPU')
 
-export class CPU implements CPU {
-  public PC: any
-  public P: any
-  public A: any
-  public X: any
-  public Y: any
-  public S: any
+export class CPU {
+  private PC: any
+  private P: any
+  private A: any
+  private X: any
+  private Y: any
+  private S: any
 
-  public links: Neszilla.links
-  public PRG_ROM: string[][]
+  private links: Neszilla.links
 
   constructor() {
     // Registers
@@ -33,12 +32,10 @@ export class CPU implements CPU {
     // Direct link to the other NES hardware,
     // in order to avoid constantly jumping through hoops
     this.links = {
+      cartSlot: null,
       ppu: null,
       apu: null,
     }
-
-    // The PRG ROM of the game
-    this.PRG_ROM = []
   }
 
   /**
@@ -52,6 +49,8 @@ export class CPU implements CPU {
     for (const hardware in newLinks) {
       if (!this.links.hasOwnProperty(hardware)) {
         logger.log(`Linking unknown hardware: ${hardware}`)
+      } else {
+        logger.log('Linking hardware: ' + hardware)
       }
     }
 
@@ -59,14 +58,6 @@ export class CPU implements CPU {
       ...this.links,
       ...newLinks,
     }
-  }
-
-  /**
-   * Feed the PRG ROM into the CPU
-   * @param  {string[]} PRG_ROM the PRG ROM to feed
-   */
-  feed(PRG_ROM: string[][]): void {
-    this.PRG_ROM = PRG_ROM
   }
 
   /**
@@ -80,10 +71,16 @@ export class CPU implements CPU {
     this.X = null
     this.Y = null
     this.S = null
-    this.PRG_ROM = []
   }
 
   start(): void {
-    logger.log(this.PRG_ROM)
+    let PRG_ROM: string[][] = []
+    if (this.links.cartSlot) {
+      const cart = this.links.cartSlot.getCart()
+      if (cart) {
+        PRG_ROM = cart.PRG_ROM
+      }
+    }
+    logger.log(PRG_ROM)
   }
 }

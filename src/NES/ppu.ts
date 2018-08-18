@@ -19,20 +19,17 @@ import { clog } from '../lib/clog'
 const logger = new clog()
 logger.setPrefix('PPU')
 
-export class PPU implements Neszilla.PPU {
-  public links: Neszilla.links
-  public CHR_ROM: string[][]
+export class PPU {
+  private links: Neszilla.links
 
   constructor() {
     // Direct link to the other NES hardware,
     // in order to avoid constantly jumping through hoops
     this.links = {
+      cartSlot: null,
       cpu: null,
       apu: null,
     }
-
-    // The CHR ROM of the game
-    this.CHR_ROM = []
   }
 
   /**
@@ -42,10 +39,12 @@ export class PPU implements Neszilla.PPU {
    * @param {string} new_links.hardware The hardware to be linked to the PPU
    * @param {hardware} new_links.instance The instance of the hardware
    */
-  link(newLinks: { cpu?: any, apu?: any }): void {
+  link(newLinks: Neszilla.links): void {
     for (const hardware in newLinks) {
       if (!this.links.hasOwnProperty(hardware)) {
         logger.log('Linking unknown hardware: ' + hardware)
+      } else {
+        logger.log('Linking hardware: ' + hardware)
       }
     }
 
@@ -55,20 +54,18 @@ export class PPU implements Neszilla.PPU {
     }
   }
 
-  /**
-   * Feed the CHR ROM into the PPU
-   * @param  {string[]} CHR_ROM the CHR ROM to feed
-   */
-  feed(CHR_ROM: string[][]): void {
-    this.CHR_ROM = CHR_ROM
-  }
-
   flush(): void {
     logger.log('Flushing...')
-    this.CHR_ROM = []
   }
 
   start(): void {
-    logger.log(this.CHR_ROM)
+    let CHR_ROM: string[][] = []
+    if (this.links.cartSlot) {
+      const cart = this.links.cartSlot.getCart()
+      if (cart) {
+        CHR_ROM = cart.CHR_ROM
+      }
+    }
+    logger.log(CHR_ROM)
   }
 }
