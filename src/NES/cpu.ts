@@ -110,5 +110,40 @@ export class CPU {
       })
 
     logger.log('Successfully extracted PRG ROM')
+
+    this.reader.strap(PRG_ROM[0])
+
+    while (true) {
+      await this.read()
+    }
+  }
+
+  /**
+   * Read the content of the PRG ROM and execute the instructions
+   */
+  read(): void {
+    // Instructions: https://www.masswerk.at/6502/6502_instruction_set.html
+    const NewInstruction = this.reader.readOne()
+    console.log(NewInstruction)
+    switch (NewInstruction) {
+      case '00' :   // BRK
+        this.P[5] = 1
+        break
+      case '01' :   // ORA Accumulator
+        this.A |= parseInt(this.reader.readOne(), 16)
+        this.P[0] = IntToArr8Bit(this.A)[0]
+        if (this.A === 0) { this.P[6] = 1 }
+        break
+      case '05' :   // ORA Zero Page
+        this.PC += 1
+        this.A |= this.rom[this.PC]
+        this.P[0] = IntToArr8Bit(this.A)[0]
+        if (this.A === 0) { this.P[6] = 1 }
+        break
+      case '06' :
+        break
+      case '08' :
+        break
+    }
   }
 }
