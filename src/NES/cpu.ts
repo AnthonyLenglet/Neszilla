@@ -12,30 +12,41 @@ import {
   CPUStartupError,
 } from '../lib/errors'
 
+import {
+  IntToUarr8Bit,
+  IntToArr8Bit,
+} from '../lib/converters'
+
+import { readModule } from './readModule'
+
 import { clog } from '../lib/clog'
 const logger = new clog()
 logger.setPrefix('CPU')
 
 export class CPU {
-  private PC: any
-  private P: any
-  private A: any
-  private X: any
-  private Y: any
-  private S: any
+  private PC: number
+  private P: number[]
+  private A: number
+  private X: number
+  private Y: number
+  private S: number
 
   private links: Neszilla.links
+  private rom: number[]
+  private reader: readModule
 
   constructor() {
     // Registers
-    this.PC = null
-    this.P = null
-    this.A = null
-    this.X = null
-    this.Y = null
-    this.S = null
+    this.PC = 0b00000000
+    this.P = IntToUarr8Bit(0b00000000)
+    this.A = 0b00000000
+    this.X = 0b00000000
+    this.Y = 0b00000000
+    this.S = 0b00000000
 
     this.links = {}
+    this.rom = Array(0xffff).fill(0x00, 0x0000, 0xffff)
+    this.reader = new readModule()
   }
 
   /**
@@ -80,12 +91,12 @@ export class CPU {
    */
   flush(): void {
     logger.log('Flushing...')
-    this.PC = null
-    this.P = null
-    this.A = null
-    this.X = null
-    this.Y = null
-    this.S = null
+    this.PC = 0b00000000
+    this.P = IntToUarr8Bit(0b00000000)
+    this.A = 0b00000000
+    this.X = 0b00000000
+    this.Y = 0b00000000
+    this.S = 0b00000000
   }
 
   /**
