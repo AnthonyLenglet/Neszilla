@@ -35,13 +35,7 @@ export class CPU {
     this.Y = null
     this.S = null
 
-    // Direct link to the other NES hardware,
-    // in order to avoid constantly jumping through hoops
-    this.links = {
-      cartSlot: null,
-      ppu: null,
-      apu: null,
-    }
+    this.links = {}
   }
 
   /**

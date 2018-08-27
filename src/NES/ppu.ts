@@ -29,13 +29,7 @@ export class PPU {
   private links: Neszilla.links
 
   constructor() {
-    // Direct link to the other NES hardware,
-    // in order to avoid constantly jumping through hoops
-    this.links = {
-      cartSlot: null,
-      cpu: null,
-      apu: null,
-    }
+    this.links = {}
   }
 
   /**
