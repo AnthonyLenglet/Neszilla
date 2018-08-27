@@ -74,11 +74,11 @@ export class NES {
     this.power(true)
     this.cpu.start()
       .catch((error: Error) => {
-        console.error(`${error.name}: ${error.message}`)
+        logger.error(`${error.name}: ${error.message}`)
       })
     this.ppu.start()
       .catch((error: Error) => {
-        console.error(`${error.name}: ${error.message}`)
+        logger.error(`${error.name}: ${error.message}`)
       })
   }
 
