@@ -94,7 +94,7 @@ export class CPU {
   async start(): Promise<void> {
     const PRG_ROM: Neszilla.PRG_ROM = await this.extractPRG()
       .catch((error: Error) => {
-        console.error(`${error.name}: ${error.message}`)
+        logger.error(`${error.name}: ${error.message}`)
         throw new CPUStartupError('Failed to extract PRG ROM')
       })
 
