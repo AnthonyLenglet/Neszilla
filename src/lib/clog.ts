@@ -31,11 +31,12 @@ export class clog {
 
   /**
    * Log a message to the console
-   * @param {?} message the message to be outputted to the console
+   * @param {?[]} message the message to be outputted to the console
    */
-  log(message: any): void {
+  log(...message: any[]): void {
     if (isGlobalDevMode || this.isdevmode) {
-      this.prefix ? console.log(this.prefix, message) : console.log(message)
+      if (this.prefix) { message.unshift(this.prefix) }
+      console.log(...message)
     }
   }
 
