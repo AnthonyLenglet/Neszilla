@@ -5,7 +5,17 @@
   ],
   "jsRules": {},
   "rules": {
-    "semicolon": [true, "never"]
+    "semicolon": [
+      true,
+      "never"
+    ],
+    "variable-name": [
+      true,
+      "check-format",
+      "allow-leading-underscore",
+      "allow-pascal-case",
+      "allow-snake-case"
+    ]
   },
   "rulesDirectory": []
 }
