@@ -1,4 +1,4 @@
-import { toInt } from '../utilities'
+import { HexToInt } from '../lib/converters'
 
 export class Cart implements Neszilla.Cart {
   private readonly RECIEVED_DATA: string[]
@@ -17,12 +17,12 @@ export class Cart implements Neszilla.Cart {
     // 1 CHR ROM page = 8192 bytes (0x2000)
 
     this.PRG_ROM = []
-    for (let i = 0; i < toInt(this.firstLine[0x04]); i += 1) {
+    for (let i = 0; i < HexToInt(this.firstLine[0x04]); i += 1) {
       this.PRG_ROM.push(this.RECIEVED_DATA.splice(0x00, 0x4000))
     }
 
     this.CHR_ROM = []
-    for (let i = 0; i < toInt(this.firstLine[0x05]); i += 1) {
+    for (let i = 0; i < HexToInt(this.firstLine[0x05]); i += 1) {
       this.CHR_ROM.push(this.RECIEVED_DATA.splice(0x00, 0x2000))
     }
   }
