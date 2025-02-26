@@ -52,7 +52,7 @@ export class CartSlot implements Neszilla.CartSlot {
    * Fetch the data from the inserted cartridge
    * @param  {Object} cartridge the inserted cartridge
    */
-  fetchData(cartridge: Object): void {
+  fetchData(cartridge: object): void {
     this.cartReader.readAsArrayBuffer(<Blob>cartridge)
   }
 

@@ -26,8 +26,8 @@ declare namespace Neszilla {
 
   interface links {
     cartSlot?: Neszilla.CartSlot
-    cpu?: any // Neszilla.CPU
-    ppu?: any // Neszilla.PPU
-    apu?: any // Neszilla.APU
+    cpu?: unknown // Neszilla.CPU
+    ppu?: unknown // Neszilla.PPU
+    apu?: unknown // Neszilla.APU
   }
 }

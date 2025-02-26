@@ -33,7 +33,7 @@ export class clog {
    * Log a message to the console
    * @param {?[]} message the message to be outputted to the console
    */
-  log(...message: any[]): void {
+  log(...message: unknown[]): void {
     if (isGlobalDevMode || this.isdevmode) {
       if (this.prefix) { message.unshift(this.prefix) }
       console.log(...message)
@@ -45,7 +45,7 @@ export class clog {
    * @param {string} type the type of the error message
    * @param {?[]} message the error to be outputted to the console
    */
-  error(type: string, ...message: any[]): void {
+  error(type: string, ...message: unknown[]): void {
     if (isGlobalDevMode || this.isdevmode) {
       if (this.prefix) {
         console.error(this.prefix, type + ':', ...message)
@@ -59,7 +59,7 @@ export class clog {
    * Log a warning message to the console
    * @param {?[]} message the warning to be outputted to the console
    */
-  warning(...message: any[]): void {
+  warning(...message: unknown[]): void {
     if (isGlobalDevMode || this.isdevmode) {
       if (this.prefix) { message.unshift(this.prefix) }
       console.warn(...message)

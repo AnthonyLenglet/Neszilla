@@ -1,28 +1,31 @@
 {
-    "name": "Neszilla",
+    "name": "neszilla",
     "version": "1.0.0",
-    "description": "A Javascript NES emulator 🎮",
-    "scripts": {
-        "start": "webpack-dev-server",
-        "build": "webpack",
-        "test": "echo \"Error: no test specified\" && exit 1"
+    "author": "Anthony Lenglet",
+    "devDependencies": {
+        "@eslint/js": "^9.21.0",
+        "@stylistic/eslint-plugin-js": "^4.1.0",
+        "@typescript-eslint/eslint-plugin": "^8.25.0",
+        "@typescript-eslint/parser": "^8.25.0",
+        "esbuild": "^0.25.0",
+        "eslint": "^9.21.0",
+        "globals": "^16.0.0",
+        "parcel": "^2.13.3",
+        "typescript": "^5.7.3",
+        "typescript-eslint": "^8.25.0"
     },
+    "description": "A Javascript NES emulator 🎮",
     "keywords": [
         "Javascript",
         "NES",
         "Emulator",
         "Neszilla"
     ],
-    "author": "Anthony Lenglet",
     "license": "ISC",
-    "dependencies": {},
-    "devDependencies": {
-        "ts-loader": "^4.4.2",
-        "tslint": "^5.11.0",
-        "tslint-config-airbnb": "^5.9.2",
-        "typescript": "^3.0.1",
-        "webpack": "^4.16.5",
-        "webpack-cli": "^3.1.0",
-        "webpack-dev-server": "^3.1.5"
+    "scripts": {
+        "start": "parcel index.html",
+        "build": "parcel build index.html",
+        "test": "echo \"Error: no test specified\" && exit 1",
+        "lint": "eslint"
     }
 }

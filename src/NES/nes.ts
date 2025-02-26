@@ -8,14 +8,14 @@ import { PPU } from './ppu'
 import { CartSlot } from './cartSlot'
 
 export class NES {
-  private cpu: CPU
-  private ppu: PPU
-  private cartSlot: CartSlot
-  private powerBtn: Element
-  private powerIsOn: boolean
+  readonly cpu: CPU
+  readonly ppu: PPU
+  readonly cartSlot: CartSlot
+  readonly powerBtn: Element
+  protected powerIsOn: boolean
 
   constructor() {
-    this.cpu = new CPU()
+    this.cpu = new CPU(this)
     this.ppu = new PPU()
     this.cartSlot = new CartSlot()
 

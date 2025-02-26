@@ -20,10 +20,13 @@ import {
 import { readModule } from './readModule'
 
 import { clog } from '../lib/clog'
+import { type NES } from './nes'
 const logger = new clog()
 logger.setPrefix('CPU')
 
 export class CPU {
+  private readonly NES: NES
+
   private PC: number
   private P: number[]
   private A: number
@@ -35,7 +38,8 @@ export class CPU {
   private rom: number[]
   private reader: readModule
 
-  constructor() {
+  constructor(NESInstance: NES) {
+    this.NES = NESInstance
     // Registers
     this.PC = 0b00000000
     this.P = IntToUarr8Bit(0b00000000)
@@ -45,7 +49,7 @@ export class CPU {
     this.S = 0b00000000
 
     this.links = {}
-    this.rom = Array(0xffff).fill(0x00, 0x0000, 0xffff)
+    this.rom = Array<number>(0xffff).fill(0x00, 0x0000, 0xffff)
     this.reader = new readModule()
   }
 
@@ -73,7 +77,7 @@ export class CPU {
    */
   link(newLinks: Neszilla.links): void {
     for (const hardware in newLinks) {
-      if (!this.links.hasOwnProperty(hardware)) {
+      if (!Object.prototype.hasOwnProperty.call(this.links, hardware)) {
         logger.log(`Linking unknown hardware: ${hardware}`)
       } else {
         logger.log('Linking hardware: ' + hardware)
@@ -92,7 +96,7 @@ export class CPU {
   flush(): void {
     logger.log('Flushing...')
     this.PC = 0b00000000
-    this.P = IntToUarr8Bit(0b00000000)
+    this.P = IntToUarr8Bit(0b00100010)
     this.A = 0b00000000
     this.X = 0b00000000
     this.Y = 0b00000000
@@ -121,7 +125,7 @@ export class CPU {
   /**
    * Read the content of the PRG ROM and execute the instructions
    */
-  read(): void {
+  read(): Promise<void> {
     // Instructions: https://www.masswerk.at/6502/6502_instruction_set.html
     const NewInstruction = this.reader.readOne()
     console.log(NewInstruction)
@@ -145,5 +149,9 @@ export class CPU {
       case '08' :
         break
     }
+
+    return new Promise((resolve) => {
+      setTimeout(() => { resolve() }, 1000)
+    })
   }
 }

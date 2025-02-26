@@ -56,7 +56,7 @@ export class PPU {
    */
   link(newLinks: Neszilla.links): void {
     for (const hardware in newLinks) {
-      if (!this.links.hasOwnProperty(hardware)) {
+      if (!Object.prototype.hasOwnProperty.call(this.links, hardware)) {
         logger.log('Linking unknown hardware:', hardware)
       } else {
         logger.log('Linking hardware:', hardware)
@@ -80,7 +80,7 @@ export class PPU {
    * Start the PPU
    */
   async start(): Promise<void> {
-    const CHR_ROM: Neszilla.CHR_ROM = await this.extractCHR()
+    await this.extractCHR()
       .catch((error: Error) => {
         logger.error(error.name, error.message)
         throw new PPUStartupError('Failed to extract CHR ROM')
